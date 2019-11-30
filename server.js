@@ -24,6 +24,7 @@ sub.on('message', data => {
             if (err) return console.error(err.message);
 
             if (row){
+
                 const outMessage = {
                     msg_id: message.msg_id,
                     user_id: row.user_id,
@@ -31,8 +32,6 @@ sub.on('message', data => {
                 };
 
                 pub.send('api_out' + JSON.stringify(outMessage));
-                pub.close();
-                sub.close();
 
             } else {
 
@@ -43,9 +42,12 @@ sub.on('message', data => {
                 };
 
                 pub.send('api_out' + JSON.stringify(outMessage));
-                pub.close();
-                sub.close();
             }
         });
     }
+});
+
+process.on('SIGINT', () => {
+    pub.close();
+    sub.close();
 });
